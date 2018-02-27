@@ -1,0 +1,15 @@
+/*!
+ * Styles for WordPress administration.
+ *
+ * @since 				1.0.0
+ * @package 			rps-sms
+ * @subpackage 			rps-sms/admin/css
+ * @author 				Red Pixel Studios <support@redpixel.com>
+ *//*!
+ * Styles for the redpixel font.
+ *
+ * @since 				1.0.0
+ * @package 			redpixel
+ * @author 				Red Pixel Studios <support@redpixel.com>
+ */#toplevel_page_rps-admin-menu .dashicons-admin-generic:before{font-family:'redpixel' !important;speak:none;font-style:normal;font-weight:normal;font-variant:normal;text-transform:none;line-height:1;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}#toplevel_page_rps-admin-menu .dashicons-admin-generic:before{content:"\e900" !important}.rps-css:before{content:"\e22b"}.rps-aside:before{content:"\e86d"}.rps-colors:before{content:"\e40a"}.rps-dashboard:before{content:"\e871"}.rps-article:before{content:"\e873"}.rps-notification:before{content:"\e151"}.rps-elements:before{content:"\e01e"}.rps-widgets:before{content:"\e87b"}.rps-editor:before{content:"\e23c"}.rps-localized:before{content:"\e244"}.rps-banners:before{content:"\e912"}.rps-info:before{content:"\e88e"}.rps-term:before{content:"\e88f"}.rps-modes:before{content:"\e53b"}.rps-images:before{content:"\e432"}.rps-globals:before{content:"\e80b"}.rps-post:before{content:"\e8b0"}.rps-presentation:before{content:"\e8f4"}.rps-search:before{content:"\e8b6"}.rps-send:before{content:"\e163"}.rps-function:before{content:"\e8b8"}.rps-fonts:before{content:"\e262"}.rps-iconography:before{content:"\e422"}.rps-title:before{content:"\e264"}.rps-layouts:before{content:"\e8ea"}.rps-sidebars:before{content:"\e8eb"}.rps-columns:before{content:"\e8ec"}.rps-templates:before{content:"\e42b"}.rps-parts:before{content:"\e8ed"}.rps-navigation:before{content:"\e8ef"}.rps-view_module:before{content:"\e8f0"}.rps-logo:before{content:"\e42c"}.rps-wrap:before{content:"\e051"}.rps-body:before{content:"\e069"}.rps-rps-logo-bug:before{content:"\e900"}@font-face{font-family:'redpixel';src:url("fonts/redpixel/redpixel.woff2?g4cb7d") format("woff2"),url("fonts/redpixel/redpixel.ttf?g4cb7d") format("truetype"),url("fonts/redpixel/redpixel.woff?g4cb7d") format("woff"),url("fonts/redpixel/redpixel.svg?g4cb7d#redpixel") format("svg");font-weight:normal;font-style:normal}
+/*# sourceMappingURL=admin.css.map */
