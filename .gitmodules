@@ -1,0 +1,3 @@
+[submodule "admin/ReduxFramework"]
+	path = admin/ReduxFramework
+	url = https://github.com/ReduxFramework/ReduxFramework.git
