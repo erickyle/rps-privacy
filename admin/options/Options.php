@@ -18,13 +18,12 @@ use \ReduxFrameworkPlugin;
  */
 class Options {
 	
-	private static $_opt_name;
+	const OPT_NAME = 'rps_plugin_boilerplate_options';
 	
 	/**
 	 * Prevent subclasses from generating a constructor.
 	 */
-	final function __construct( $plugin_name, $version, $plugin_display_name ) {
-		// do nothing, could also throw a warning or error.
+	final function __construct() {
 	}
 	
 	/**
@@ -36,27 +35,31 @@ class Options {
 	*/
 	static function init( $plugin ) {
 		
-		if ( class_exists( 'Redux' ) and file_exists( dirname( __FILE__ ) . '/options.json' ) ) {
+		self::set_sections();
+		\rps\components\reduxFramework\v1_0_0\ReduxFramework::init( $plugin, self::OPT_NAME );
 		
-			self::load_options_config( $plugin );
-			self::remove_notices();
-			self::add_social_links( static::$_opt_name );
-			
-		}
-		
+	}
+
+	/**
+	 * Ready the options.
+	 *
+	 * @since 				1.0.0
+	 * @access 				public
+	 */
+	public static function ready() {
+		Redux::init( self::OPT_NAME );
 	}
 
 	/**
 	 * Gets the opt_name assigned to the Redux Framework options.
 	 *
 	 * @since 				1.0.0
-	 * @return 				string 				$_opt_name 				The opt name for the Redux Framework options.
 	 * @access 				public
 	 */
 	public static function get_opt_name() {
-		return self::$_opt_name;
+		return self::OPT_NAME;
 	}
-	
+		
 	/**
 	 * Gets a specified option.
 	 * 
@@ -65,49 +68,16 @@ class Options {
 	 * @return 				mixed 										The value of the option.
 	 * @access 				public
 	 */
-	public static function get_option( $option_name ) {		
-		global ${self::$_opt_name};
+	public static function get_option( $option_name ) {
+	
+		global ${self::OPT_NAME};
 		
-		$opt = ${self::$_opt_name};
+		$opt = ${self::OPT_NAME};
 		
 		if ( isset( $opt[ $option_name ] ) ) {
 			return $opt[ $option_name ];
 		}
-	}
-
-	/**
-	 * Loads the options.json file used to initialize Redux Framework.
-	 *
-	 * @since 				1.0.0
-	 * @param 				object 				$plugin 				\rpsPluginBoilerplate\includes\Plugin
-	 * @access 				private
-	 */
-	private static function load_options_config( $plugin ) {
-
-		$args = array();
-		$options = json_decode( file_get_contents( dirname( __FILE__ ) . '/options.json' ), true );
-
-		if ( ! empty( $options ) and array_key_exists( 'args', $options ) ) {
-		
-			$args = $options['args'];
-			
-			$args['display_name'] = $plugin->get_plugin_display_name();
-			$args['display_version'] = $plugin->get_plugin_version();
-			$args['menu_title'] = $plugin->get_plugin_display_name();
-			$args['page_title'] = $plugin->get_plugin_display_name();
-			$args['page_slug'] = $plugin->get_plugin_name();
-			$args['intro_text'] = $plugin->get_plugin_short_description();
-			$args = array_merge( $args, self::add_social_links() );
-			
-			static::$_opt_name = '_' . str_ireplace( '-', '_', $plugin->get_plugin_name() );
-			
-			Redux::setArgs( static::$_opt_name, $args );
-			Redux::setSections( static::$_opt_name, self::sections( $plugin ) );
-			Redux::setHelpTab( static::$_opt_name, self::help( $plugin ) );
-			Redux::setHelpSidebar( static::$_opt_name, self::help_sidebar( $plugin ) );
-			
-		}
-				
+	
 	}
 	
 	/**
@@ -117,100 +87,26 @@ class Options {
 	 * @access 				private
 	 * @see 				https://docs.reduxframework.com/core/sections/getting-started-with-sections/
 	 */
-	private static function sections( $plugin ) {
+	private static function set_sections() {
 		
-		$sections = array();
+		Redux::setSection( self::OPT_NAME, array(
+			'id' 					=> 'section',
+			'title' 				=> __( 'Preferences', 'rps-plugin-boilerplate' ),
+			'subtitle' 				=> '',
+			'desc'	 				=> __( 'Preference settings for RPS Open Graph.', 'rps-plugin-boilerplate' ),
+			'icon' 					=> 'rps rps-settings',
+			'subsection' 			=> false,
+		) );
 		
-		$sections[] = array(
-			'title' 		=> __( 'Title', 'rps-plugin-boilerplate' ),
-			'id' 			=> 'general',
-			'desc' 			=> __( 'Description.', 'rps-plugin-boilerplate' ),	
-			'icon' 			=> 'el el-cogs',
-			'fields' 		=> array(
-				//insert field arrays
-			),
-		);
-
-		foreach( $plugin->get_plugin_components() as $component ) {
-			if ( method_exists( $component, 'get_option_sections' ) ) {
-				foreach( $component->get_option_sections( self::$_opt_name ) as $section ) {
-					$sections[] = $section;
-				}
-			}
-		}
+		Redux::setField( self::OPT_NAME, array(
+			'section_id' 			=> 'section',
+			'id' 					=> 'section-switch',
+			'type' 					=> 'switch',
+			'title' 				=> __( 'Enable', 'rps-plugin-boilerplate' ),
+			'subtitle' 				=> __( 'Specify if OpenGraph meta tags should be output.', 'rps-plugin-boilerplate' ),
+			'default' 				=> false,
+		) );
 		
-		return $sections;
-
 	}
 	
-	/**
-	 * Sets help tabs and content.
-	 * 
-	 * @since 				1.0.0
-	 * @param 				object 				$plugin 				\rpsGoogleAnalytics\includes\Plugin
-	 * @access 				private
-	 */
-	private static function help( $plugin ) {
-		$tabs = array();
-		return $tabs;
-	}
-	
-	/**
-	 * Sets help sidebar content.
-	 * 
-	 * @since 				1.0.0
-	 * @param 				object 				$plugin 				\rpsGoogleAnalytics\includes\Plugin
-	 * @access 				private
-	 */
-	private static function help_sidebar( $plugin ) {
-		$content = '';
-		return $content;
-	}
-
-	/**
-	 * Removes demo mode and notices from Redux Framework.
-	 *
-	 * @since 				1.0.0
-	 * @access 				private
-	 */
-	private static function remove_notices() {
-			
-		remove_filter( 'plugin_row_meta', array( ReduxFrameworkPlugin::get_instance(), 'plugin_metalinks'), null, 2 );
-		remove_action( 'admin_notices', array( ReduxFrameworkPlugin::get_instance(), 'admin_notices' ) );    
-		
-	}
-
-	/**
-	 * Adds social media buttons.
-	 *
-	 * @since 				1.0.0
-	 * @return 				array 				$share_icons 			An array of share icons for display in Redux Framework.
-	 * @access 				public
-	 */
-	public static function add_social_links() {
-		
-		$share_icons = array(
-			'share_icons' => array(
-				array(
-					"url" => "//www.facebook.com/redpixel",
-	                "title" => __( 'Like us on Facebook', 'rps-theme-framework' ),
-	                "icon" => "el-icon-facebook"
-				),
-				array(
-					"url" => "//twitter.com/redpixelstudios",
-	                "title" => __( 'Follow us on Twitter', 'rps-theme-framework' ),
-	                "icon" => "el-icon-twitter"
-				),
-				array(
-					"url" => "//www.linkedin.com/company/red-pixel-studios",
-	                "title" => __( 'Find us on LinkedIn', 'rps-theme-framework' ),
-	                "icon" => "el-icon-linkedin"
-				)
-			)
-		);
-		
-		return $share_icons;
-				
-	}
-
 }
