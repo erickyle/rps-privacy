@@ -14,8 +14,25 @@ namespace rpsPluginBoilerplate\includes;
  */
 class Deactivator {
 
+	/**
+	 * Runs on plugin deactivation.
+	 *
+	 * @since 				1.0.0
+	 */
 	public static function deactivate() {
-
+		self::remove_role();
+	}
+	
+	/**
+	 * Adds the plugin role.
+	 *
+	 * @since 				1.0.0
+	 */
+	private static function remove_role() {
+		
+		$plugin = Plugin::get_instance();
+		remove_role( $plugin->get_plugin_name() );
+		
 	}
 
 }

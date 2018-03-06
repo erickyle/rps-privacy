@@ -14,8 +14,30 @@ namespace rpsPluginBoilerplate\includes;
  */
 class Activator {
 
+	/**
+	 * Runs on plugin activation.
+	 *
+	 * @since 				1.0.0
+	 */
 	public static function activate() {
-
+		self::add_role();
+	}
+	
+	/**
+	 * Adds the plugin role.
+	 *
+	 * @since 				1.0.0
+	 */
+	private static function add_role() {
+		
+		$plugin = Plugin::get_instance();
+				
+		add_role(
+			$plugin->get_plugin_name(),
+			$plugin->get_plugin_display_name(),
+			$plugin->get_plugin_caps_for_role()
+		);
+		
 	}
 
 }

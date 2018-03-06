@@ -1,7 +1,6 @@
 <?php
 
 namespace rpsPluginBoilerplate\includes;
-
 use \rpsPluginBoilerplate\admin\options\Options;
 use \rpsPluginBoilerplate\admin\Admin;
 use \rpsPluginBoilerplate\frontend\Frontend;
@@ -23,28 +22,30 @@ use \rpsPluginBoilerplate\frontend\Frontend;
 class Plugin {
 
     /**
-     * @var Singleton The reference to Plugin instance of this class
+     * @var 				Plugin 				$instance 				Singleton The reference to Plugin instance of this class
      */
     private static $instance;
     
     /**
      * Returns the Plugin instance of this class.
      *
-     * @return Singleton The Plugin instance.
+     * @since 				1.0.0
+     * @access 				public
+     * @return 				Plugin 										Singleton The Plugin instance.
      */
-    public static function get_instance()
-    {
-        if (null === static::$instance) {
-            static::$instance = new static('');
+    public static function get_instance() {
+
+        if ( null === static::$instance ) {
+            static::$instance = new static( '' );
             static::$instance->init();
         }
         
         return static::$instance;
+
     }
 
 	/**
-	 * The loader that's responsible for maintaining and registering all hooks that power
-	 * the plugin.
+	 * The loader responsible for maintaining and registering all hooks that power the plugin.
 	 *
 	 * @since 				1.0.0
 	 * @access 				protected
@@ -62,7 +63,8 @@ class Plugin {
 	protected $plugin_path;
 
 	/**
-	 * The unique identifier of this plugin.
+	 * The name of the plugin used to uniquely identify it within the context of WordPress
+	 * and to define internationalization functionality.
 	 *
 	 * @since 				1.0.0
 	 * @access 				protected
@@ -107,49 +109,40 @@ class Plugin {
 	protected $plugin_author;
 
 	/**
-	 * The path to configuration files used by the plugin.
-	 *
-	 * @since 				1.0.0
-	 * @access 				protected
-	 * @var 				string 				$plugin_config_path 			The path to the configuration files used by the plugin.
-	 */
-	protected $plugin_config_path;
-
-	/**
-	 * The path to cache files used by the plugin.
-	 *
-	 * @since 				1.0.0
-	 * @access 				protected
-	 * @var 				string 				$plugin_config_cache_path 		The path to the cache files used by the plugin.
-	 */
-	protected $plugin_config_cache_path;
-
-	/**
-	 * The url to configuration files used by the plugin.
-	 *
-	 * @since 				1.0.0
-	 * @access 				protected
-	 * @var 				string 				$plugin_config_url 				The url to the configuration files used by the plugin.
-	 */
-	protected $plugin_config_url;
-
-	/**
-	 * The url to configuration files used by the plugin.
-	 *
-	 * @since 				1.0.0
-	 * @access 				protected
-	 * @var 				string 				$plugin_config_cache_url 		The url to the configuration files used by the plugin.
-	 */
-	protected $plugin_config_cache_url;
-
-	/**
 	 * The components.
 	 *
 	 * @since 				1.0.0
 	 * @access 				protected
-	 * @var 				[stdObject]			$plugin_components 				The components used in the plugin.
+	 * @var 				array				$plugin_components 				The components used in the plugin.
 	 */
 	protected $plugin_components;
+
+	/**
+	 * The plugin caps.
+	 *
+	 * @since 				1.0.0
+	 * @access 				protected
+	 * @var 				array 				$plugin_caps 					The plugin caps.
+	 */
+	protected $plugin_caps;
+	
+	/**
+	 * The path to the plugin root.
+	 *
+	 * @since 				1.0.0
+	 * @access 				protected
+	 * @var 				array 				$plugin_path 					The plugin path.
+	 */
+	protected $plugin_path;
+
+	/**
+	 * The plugin filesystem.
+	 *
+	 * @since 				1.0.0
+	 * @access 				protected
+	 * @var 				Filesystem 			$filesystem 					The plugin filesystem.
+	 */
+	protected $filesystem;
 
 	/**
 	 * Define the core functionality of the plugin.
@@ -164,11 +157,17 @@ class Plugin {
 	 */
 	public function __construct( $version ) {
 
-		$this->plugin_name = 'rps-plugin-boilerplate';
-		$this->plugin_display_name = 'RPS Plugin Boilerplate';
-		$this->plugin_short_description = __( 'Short description no more than 150 characters', 'rps-plugin-boilerplate' );
-		$this->plugin_version = $version;
+		$this->set_plugin_name( 'rps-plugin-boilerplate' );
+		$this->set_plugin_display_name( 'RPS Plugin Boilerplate' );
+		$this->set_plugin_short_description( __( 'Short description no more than 150 characters.', 'rps-plugin-boilerplate' ) );
+		$this->set_plugin_version( $version );
+		$this->set_plugin_author( 'Red Pixel Studios' );
+		
 		$this->plugin_components = array();
+		$this->plugin_caps = array();
+		
+		$this->filesystem = null;
+		
 		static::$instance = $this;
 
 	}
@@ -184,47 +183,58 @@ class Plugin {
 	 * @access 				public
 	 */
 	public function init() {
-
-		$this->set_plugin_path();
-		$this->set_plugin_config_paths();
-
+		
+		$this->set_filesystem( new \rps\components\wpUtilities\v1_0_0\FileSystem( $this ) );
 		$this->load_dependencies();
-		$this->set_locale();
-		$this->define_admin_hooks();
+		$this->set_locale();		
+		$this->init_options();
+
 		$this->define_public_hooks();
+		$this->define_admin_hooks();
 		$this->define_shortcode_hooks();
+				
+		$this->init_components();
+		
+	}
+	
+	/**
+	 * Initialize options.
+	 *
+	 * @since 1.0.0
+	 */
+	private function init_options() {
+		Options::init( $this );
+	}
+
+	/**
+	 * Initialize plugin components registered by plugin bootstrap.
+	 *
+	 * @since 				1.0.0
+	 */
+	private function init_components() {
 		
 		foreach ( $this->get_plugin_components() as $component ) {
 			if ( method_exists( $component, 'init' ) ) {
 				$component->init( $this );
 			}
-		}			
-		
+		}
+
 	}
 
 	/**
 	 * Load the required dependencies for this plugin.
-	 *
-	 * Setup the options framework if necessary.
-	 *
-	 * Create an instance of the loader which will be used to register the hooks
-	 * with WordPress.
+	 * Create an instance of the loader which will be used to register the hooks with WordPress.
 	 *
 	 * @since 				1.0.0
 	 * @access 				private
 	 */
 	private function load_dependencies() {
-
-		Options::init( $this );
 		$this->loader = new Loader();
-	
 	}
 
 	/**
 	 * Define the locale for this plugin for internationalization.
-	 *
-	 * Uses the Plugin_i18n class in order to set the domain and to register the hook
-	 * with WordPress.
+	 * Uses the Plugin_i18n class in order to set the domain and to register the hook with WordPress.
 	 *
 	 * @since 				1.0.0
 	 * @access 				private
@@ -233,7 +243,6 @@ class Plugin {
 
 		$i18n = new Internationalization();
 		$i18n->set_domain( $this->get_plugin_name() );
-
 		$this->loader->add_action( 'plugins_loaded', $i18n, 'load_plugin_textdomain' );
 
 	}
@@ -246,11 +255,15 @@ class Plugin {
 	 */
 	private function define_admin_hooks() {
 
-		$admin = new Admin( $this );
+		if ( is_admin() ) {
 		
-		$this->loader->add_action( 'admin_menu', $admin, 'rps_admin_menu', 11 );
-		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_styles' );
-		$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_scripts' );
+			$admin = new Admin( $this );
+			
+			$this->loader->add_action( 'admin_menu', $admin, 'rps_admin_menu', 11 );
+			$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_styles' );
+			$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_scripts' );
+			
+		}
 		
 	}
 
@@ -295,193 +308,6 @@ class Plugin {
 	}
 
 	/**
-	 * Sets the path to the plugin relative to the filesystem root and suitable for use with WP_Filesystem.
-	 *
-	 * @since 				1.0.0
-	 */
-	private function set_plugin_path() {
-	    
-	    global $wp_filesystem;
-	    
-	    if ( empty( $wp_filesystem ) ) {
-	        require_once( ABSPATH .'/wp-admin/includes/file.php' );
-	        WP_Filesystem();
-	    }
-	    
-	    if ( ! empty( $wp_filesystem->abspath() ) ) {
-			$this->plugin_path = str_replace( ABSPATH, $wp_filesystem->abspath(), dirname( dirname( __FILE__ ) ) );
-		}
-		else {
-			$this->plugin_path = dirname( dirname( __FILE__ ) );
-		}
-			
-	}
-	
-	/**
-	 * Gets the path to the plugin relative to the filesystem root and suitable for use with WP_Filesystem.
-	 *
-	 * @since 				1.0.0
-	 * @return 				string 				The path to the plugin relative to filesystem root.
-	 */
-	public function get_plugin_path() {
-		return $this->plugin_path;
-	}
-
-	/**
-	 * Sets the path and url to the plugin configuration files and creates a directory for the plugin if one does not already exist.
-	 *
-	 * @since 				1.0.0
-	 */
-	private function set_plugin_config_paths() {
-		
-		$path = '';
-		$url = '';
-		$cache_path = '';
-		$cache_url = '';
-		
-		$wp_upload_path = wp_upload_dir();
-		
-		if ( ! is_wp_error( $wp_upload_path ) ) { 
-			
-			if ( isset( $wp_upload_path['basedir'] ) and ! empty( $wp_upload_path['basedir'] ) ) {
-			
-				$path = trailingslashit( trailingslashit( $wp_upload_path['basedir'] ) . 'rps/' . self::get_plugin_name() );
-				$cache_path = $path . 'cache/';
-				
-				wp_mkdir_p( $cache_path );
-				
-				$url = trailingslashit( trailingslashit( $wp_upload_path['baseurl'] ) . 'rps/' . self::get_plugin_name() );
-				$cache_url = $url . 'cache/';
-				
-			}
-						
-		}
-		
-/*
-		error_log( print_r( $wp_upload_path, true ) );
-		error_log( print_r( $path, true ) );
-		error_log( print_r( $url, true ) );
-*/
-		
-		$this->plugin_config_path = $path;
-		$this->plugin_config_url = $url;
-		$this->plugin_config_cache_path = $cache_path;
-		$this->plugin_config_cache_url = $cache_url;
-		
-	}
-
-	/**
-	 * Retrieve the path to the plugin configuration files.
-	 *
-	 * @since 				1.0.0
-	 * @return 				string 				The path to the plugin configuration files relative to filesystem root.
-	 */
-	public function get_plugin_config_path() {
-		return $this->plugin_config_path;
-	}
-
-	/**
-	 * Retrieve the path to the plugin cache files.
-	 *
-	 * @since 				1.0.0
-	 * @return 				string 				The path to the plugin cache files relative to filesystem root.
-	 */
-	public function get_plugin_config_cache_path() {
-		return $this->plugin_config_cache_path;
-	}
-
-	/**
-	 * Retrieve the url to the plugin configuration files.
-	 *
-	 * @since 				1.0.0
-	 * @return 				string 				The url to the plugin configuration files relative to filesystem root.
-	 */
-	public function get_plugin_config_url() {
-		return $this->plugin_config_url;
-	}
-
-	/**
-	 * Retrieve the url to the plugin configuration cache files.
-	 *
-	 * @since 				1.0.0
-	 * @return 				string 				The absolute url to the plugin configuration cache files.
-	 */
-	public function get_plugin_config_cache_url() {
-		return $this->plugin_config_cache_url;
-	}
-
-	/**
-	 * The name of the plugin used to uniquely identify it within the context of
-	 * WordPress and to define internationalization functionality.
-	 *
-	 * @since 				1.0.0
-	 * @return 				string 				The name of the plugin.
-	 */
-	public function get_plugin_name() {
-		return $this->plugin_name;
-	}
-
-	/**
-	 * Get the components used in the plugin.
-	 *
-	 * @since 				1.0.0
-	 * @return 				string 				The components used in the plugin.
-	 */
-	public function get_plugin_components() {
-		return $this->plugin_components;
-	}
-
-	/**
-	 * Add a component to the components used in the plugin.
-	 *
-	 * @since 				1.0.0
-	 * @return 				\stdClass 		$component			The component to be added.
-	 */
-	public function add_plugin_component( $component ) {		
-		$this->plugin_components[] = $component;
-	}
-
-	/**
-	 * The name of the plugin used to display within the context of WordPress.
-	 *
-	 * @since 				1.0.0
-	 * @return 				string 				The name of the plugin for display.
-	 */
-	public function get_plugin_display_name() {
-		return $this->plugin_display_name;
-	}
-
-	/**
-	 * The short description of the plugin used to display within the context of WordPress.
-	 *
-	 * @since 				1.0.0
-	 * @return 				string 				The short description of the plugin for display.
-	 */
-	public function get_plugin_short_description() {
-		return $this->plugin_short_description;
-	}
-
-	/**
-	 * Retrieve the version number of the plugin.
-	 *
-	 * @since 				1.0.0
-	 * @return 				string 				The version number of the plugin.
-	 */
-	public function get_plugin_version() {
-		return $this->plugin_version;
-	}
-
-	/**
-	 * Retrieve the author of the plugin.
-	 *
-	 * @since 				1.0.0
-	 * @return 				string 				The author of the plugin.
-	 */
-	public function get_plugin_author() {
-		return $this->plugin_author;
-	}
-
-	/**
 	 * The reference to the class that orchestrates the hooks with the plugin.
 	 *
 	 * @since 				1.0.0
@@ -489,6 +315,188 @@ class Plugin {
 	 */
 	public function get_loader() {
 		return $this->loader;
+	}
+
+	/**
+	 * Set plugin_name.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function set_plugin_name( $plugin_name ) {
+		$this->plugin_name = sanitize_key( $plugin_name );
+	}
+	/**
+	 * Get plugin_name.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function get_plugin_name() {
+		return $this->plugin_name;
+	}
+
+
+	/**
+	 * Set plugin_display_name.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function set_plugin_display_name( $plugin_display_name ) {
+		$this->plugin_display_name = esc_html( $plugin_display_name );
+	}
+	/**
+	 * Get plugin_display_name.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function get_plugin_display_name() {
+		return $this->plugin_display_name;
+	}
+
+
+	/**
+	 * Set plugin_short_description.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function set_plugin_short_description( $plugin_short_description ) {
+		$this->plugin_short_description = esc_html( $plugin_short_description );
+	}
+	/**
+	 * Get plugin_short_description.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function get_plugin_short_description() {
+		return $this->plugin_short_description;
+	}
+
+
+	/**
+	 * Set plugin_version.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function set_plugin_version( $plugin_version ) {
+		$this->plugin_version = $plugin_version;
+	}
+	/**
+	 * Get plugin_version.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function get_plugin_version() {
+		return $this->plugin_version;
+	}
+
+
+	/**
+	 * Set plugin_author.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function set_plugin_author( $plugin_author ) {
+		$this->plugin_author = esc_html( $plugin_author );
+	}
+	/**
+	 * Get plugin_author.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function get_plugin_author() {
+		return $this->plugin_author;
+	}
+
+	
+	/**
+	 * Add a cap to the caps used in the plugin.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function add_plugin_cap( $cap ) {		
+		$this->plugin_caps[] = sanitize_key( $cap );
+	}
+	/**
+	 * Get the caps used in the plugin suitable for role creation.
+	 *
+	 * @since 				1.0.0
+	 * @return 				array 				$caps 						The caps used in the plugin.
+	 */
+	public function get_plugin_caps_for_role() {
+		
+		$caps = array();
+		
+		foreach ( $this->get_plugin_caps() as $cap ) {
+			$caps[$cap] = true;
+		}
+		
+		return $caps;
+		
+	}
+	/**
+	 * Get the caps used in the plugin.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function get_plugin_caps() {
+		return $this->plugin_caps;
+	}
+
+
+	/**
+	 * Set path.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function set_path( $path ) {
+		$this->path = filter_var( $path, FILTER_SANITIZE_URL );
+	}
+	/**
+	 * Get path.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function get_path() {
+		return $this->path;
+	}
+
+
+	/**
+	 * Set the plugin filesystem.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function set_filesystem( $filesystem ) {
+		
+		if ( $filesystem instanceof \rps\components\wpUtilities\v1_0_0\FileSystem ) {
+			$this->filesystem = $filesystem;
+		}
+		
+	}
+	/**
+	 * Get the plugin filesystem.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function get_filesystem() {
+		return $this->filesystem;
+	}
+
+
+	/**
+	 * Add a component to the components used in the plugin.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function add_plugin_component( $component ) {		
+		$this->plugin_components[] = $component;
+	}
+	/**
+	 * Get the components used in the plugin.
+	 *
+	 * @since 				1.0.0
+	 */
+	public function get_plugin_components() {
+		return $this->plugin_components;
 	}
 
 }

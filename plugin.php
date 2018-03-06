@@ -30,22 +30,6 @@ use \rpsPluginBoilerplate\includes\Deactivator;
  * Domain Path: 		/languages
  */
 
-if ( ! class_exists( 'ReduxFramework' ) and file_exists( dirname( __FILE__ ) . '/admin/ReduxFramework/redux-framework.php' ) ) {
-	require_once( dirname( __FILE__ ) . '/admin/ReduxFramework/redux-framework.php' );
-}
-
-/** Uncomment to use EDD
-if ( !class_exists( '\rps\components\easyDigitalDownloads\v1_1_4\EasyDigitalDownloads' ) ) {
-	require_once( dirname( __FILE__ ) . '/rps/components/easyDigitalDownloads/autoload.php' );
-}
-use \rps\components\easyDigitalDownloads\v1_1_4\EasyDigitalDownloads;
-
-if ( !class_exists( '\rps\components\tgmPluginActivation\v1_0_0\TGMPluginActivator' ) ) {
-	require_once( dirname( __FILE__ ) . '/rps/components/tgmPluginActivation/autoload.php' );
-}
-use \rps\components\tgmPluginActivation\v1_0_0\TGMPluginActivator;
-*/
-
 /**
  * Abort if this file is called directly.
  *
@@ -54,6 +38,37 @@ use \rps\components\tgmPluginActivation\v1_0_0\TGMPluginActivator;
 if ( ! defined( 'WPINC' ) ) {
 	die;
 }
+
+/** Uncomment to use reduxFramework
+if ( ! class_exists( 'ReduxFramework' ) and file_exists( dirname( __FILE__ ) . '/admin/ReduxFramework/redux-framework.php' ) ) {
+	require_once( dirname( __FILE__ ) . '/admin/ReduxFramework/redux-framework.php' );
+}
+if ( ! class_exists( '\rps\components\reduxFramework\v1_0_0\ReduxFramework' ) ) {
+	require_once dirname( __FILE__ ) . '/rps/components/reduxFramework/autoload.php';
+}
+use \rps\components\reduxFramework\v1_0_0\ReduxFramework;
+*/
+
+/** Uncomment to use easyDigitalDownloads
+if ( !class_exists( '\rps\components\easyDigitalDownloads\v1_1_4\EasyDigitalDownloads' ) ) {
+	require_once( dirname( __FILE__ ) . '/rps/components/easyDigitalDownloads/autoload.php' );
+}
+use \rps\components\easyDigitalDownloads\v1_1_4\EasyDigitalDownloads;
+*/
+
+/** Uncomment to use tgmPluginActivation
+if ( !class_exists( '\rps\components\tgmPluginActivation\v1_0_0\TGMPluginActivator' ) ) {
+	require_once( dirname( __FILE__ ) . '/rps/components/tgmPluginActivation/autoload.php' );
+}
+use \rps\components\tgmPluginActivation\v1_0_0\TGMPluginActivator;
+*/
+
+/** Uncomment to use wpUtilities
+if ( ! class_exists( '\rps\components\wpUtilities\v1_0_0\WpUtilities' ) ) {
+	require_once dirname( __FILE__ ) . '/rps/components/wpUtilities/autoload.php';
+}
+use \rps\components\easyDigitalDownloads\v1_0_0\WpUtilities;
+*/
 
 /**
  * Automatically load required classes.
@@ -106,10 +121,6 @@ register_deactivation_hook( __FILE__, __NAMESPACE__ . '\deactivate' );
 /**
  * Begins execution of the plugin.
  *
- * Since everything within the plugin is registered via hooks,
- * then kicking off the plugin from this point in the file does
- * not affect the page life cycle.
- *
  * @since 				1.0.0
  */
 function run() {
@@ -139,6 +150,7 @@ function run() {
 
 */
 	
+	$plugin->set_path( plugin_dir_path( __FILE__ ) );
 	$plugin->init();
 	$plugin->run();
 
