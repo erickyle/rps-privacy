@@ -1,9 +1,6 @@
 <?php
 
 namespace rpsPluginBoilerplate\includes;
-use \rpsPluginBoilerplate\admin\options\Options;
-use \rpsPluginBoilerplate\admin\Admin;
-use \rpsPluginBoilerplate\frontend\Frontend;
 
 /**
  * The core plugin class.
@@ -203,7 +200,7 @@ class Plugin {
 	 * @since 1.0.0
 	 */
 	private function init_options() {
-		Options::init( $this );
+		\rpsPluginBoilerplate\admin\options\Options::init( $this );
 	}
 
 	/**
@@ -248,7 +245,25 @@ class Plugin {
 	}
 
 	/**
+	 * Register all of the hooks related to the general functionality of the plugin.
+	 * Loaded in admin and frontend.
+	 *
+	 * @since 				1.0.0
+	 * @access 				private
+	 */
+	private function define_common_hooks() {
+
+		$common = new \rpsPluginBoilerplate\common\Common( $this );
+		
+		$this->loader->add_action( 'init', $common, 'register_taxonomies' );
+		$this->loader->add_action( 'init', $common, 'register_posts' );
+		$this->loader->add_action( 'widgets_init', 'rpsPluginBoilerplate\widgets\Widgets', 'register_widgets' );
+		
+	}
+
+	/**
 	 * Register all of the hooks related to the admin area functionality of the plugin.
+	 * Loaded when is_admin() is true.
 	 *
 	 * @since 				1.0.0
 	 * @access 				private
@@ -257,9 +272,8 @@ class Plugin {
 
 		if ( is_admin() ) {
 		
-			$admin = new Admin( $this );
+			$admin = new \rpsPluginBoilerplate\admin\Admin( $this );
 			
-			$this->loader->add_action( 'admin_menu', $admin, 'rps_admin_menu', 11 );
 			$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_styles' );
 			$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_scripts' );
 			
@@ -268,20 +282,22 @@ class Plugin {
 	}
 
 	/**
-	 * Register all of the hooks related to the public-facing functionality of the plugin.
+	 * Register all of the hooks related to the frontend functionality of the plugin.
+	 * Loaded when is_admin() is false.
 	 *
 	 * @since 				1.0.0
 	 * @access 				private
 	 */
 	private function define_public_hooks() {
 
-		$frontend = new Frontend( $this );
-
-		$this->loader->add_action( 'wp_enqueue_scripts', $frontend, 'enqueue_styles' );
-		$this->loader->add_action( 'wp_enqueue_scripts', $frontend, 'enqueue_scripts' );
-		$this->loader->add_action( 'init', $frontend, 'register_taxonomies' );
-		$this->loader->add_action( 'init', $frontend, 'register_posts' );
-		$this->loader->add_action( 'widgets_init', 'rpsPluginBoilerplate\widgets\Widgets', 'register_widgets' );
+		if ( ! is_admin() ) {
+		
+			$frontend = new \rpsPluginBoilerplate\frontend\Frontend( $this );
+	
+			$this->loader->add_action( 'wp_enqueue_scripts', $frontend, 'enqueue_styles' );
+			$this->loader->add_action( 'wp_enqueue_scripts', $frontend, 'enqueue_scripts' );
+			
+		}
 		
 	}
 
@@ -443,20 +459,20 @@ class Plugin {
 
 
 	/**
-	 * Set path.
+	 * Set plugin_path.
 	 *
 	 * @since 				1.0.0
 	 */
-	public function set_path( $path ) {
-		$this->path = filter_var( $path, FILTER_SANITIZE_URL );
+	public function set_plugin_path( $plugin_path ) {
+		$this->plugin_path = filter_var( $plugin_path, FILTER_SANITIZE_URL );
 	}
 	/**
-	 * Get path.
+	 * Get plugin_path.
 	 *
 	 * @since 				1.0.0
 	 */
-	public function get_path() {
-		return $this->path;
+	public function get_plugin_path() {
+		return $this->plugin_path;
 	}
 
 

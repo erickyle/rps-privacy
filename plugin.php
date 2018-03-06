@@ -150,7 +150,7 @@ function run() {
 
 */
 	
-	$plugin->set_path( plugin_dir_path( __FILE__ ) );
+	$plugin->set_plugin_path( plugin_dir_path( __FILE__ ) );
 	$plugin->init();
 	$plugin->run();
 
