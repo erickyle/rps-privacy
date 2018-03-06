@@ -24,7 +24,7 @@
 		"google_update_weekly": false,
 		"help_sidebar": "",
 		"hide_expand": false,
-		"hide_reset": false,
+		"hide_reset": true,
 		"last_tab": "",
 		"menu_icon": "",
 		"menu_type": "menu",
@@ -37,14 +37,12 @@
 		"page_icon": "icon-themes",
 		"page_parent": "rps-admin-menu",
 		"page_priority": null,
-		"page_permissions": "manage_options",
 		"save_defaults": true,
 		"settings_api": true,
-		"share_icons": "",
 		"show_import_export": false,
 		"system_info": false,
 		"transient_time": "3600",
 		"update_notice": false,
-		"use_cdn": true
+		"use_cdn": false
 	}
 }

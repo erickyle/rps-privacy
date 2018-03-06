@@ -2,13 +2,7 @@
  * Styles for WordPress administration.
  *
  * @since 				1.0.0
- * @package 			rps-sms
- * @subpackage 			rps-sms/admin/css
+ * @package 			rps-plugin-boilerplate
+ * @subpackage 			rps-plugin-boilerplate/admin/css
  * @author 				Red Pixel Studios <support@redpixel.com>
  */
-@import "fonts/redpixel/font.scss";
-@include font_redpixel();
-#toplevel_page_rps-admin-menu .dashicons-admin-generic {
-    @extend %font-redpixel;
-    @extend %font-redpixel-rps-logo-bug; 
-}
