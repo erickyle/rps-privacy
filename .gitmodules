@@ -7,3 +7,9 @@
 [submodule "rps/components/easyDigitalDownloads"]
 	path = rps/components/easyDigitalDownloads
 	url = git@github.com:redpixelstudios/rps-component-edd.git
+[submodule "rps/components/reduxFramework"]
+	path = rps/components/reduxFramework
+	url = git@github.com:redpixelstudios/rps-component-redux-framework.git
+[submodule "rps/components/wpUtilities"]
+	path = rps/components/wpUtilities
+	url = git@github.com:redpixelstudios/rps-component-wp-utilities.git
