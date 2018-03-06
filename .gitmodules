@@ -1,9 +1,6 @@
 [submodule "admin/ReduxFramework"]
 	path = admin/ReduxFramework
 	url = https://github.com/ReduxFramework/ReduxFramework.git
-[submodule "admin/css/fonts/redpixel"]
-	path = admin/css/fonts/redpixel
-	url = git@github.com:redpixelstudios/font-redpixel.git
 [submodule "rps/components/easyDigitalDownloads"]
 	path = rps/components/easyDigitalDownloads
 	url = git@github.com:redpixelstudios/rps-component-edd.git
