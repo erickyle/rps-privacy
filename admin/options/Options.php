@@ -1,7 +1,6 @@
 <?php
 
 namespace rpsPluginBoilerplate\admin\options;
-
 use \Redux;
 use \ReduxFrameworkPlugin;
 
