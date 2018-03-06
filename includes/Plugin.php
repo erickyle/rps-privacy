@@ -1,6 +1,12 @@
 <?php
 
 namespace rpsPluginBoilerplate\includes;
+use \rpsPluginBoilerplate\common\Common;
+use \rpsPluginBoilerplate\admin\Admin;
+use \rpsPluginBoilerplate\frontend\Frontend;
+use \rpsPluginBoilerplate\admin\options\Options;
+
+use \rps\components\wpUtilities\v1_0_0\FileSystem;
 
 /**
  * The core plugin class.
@@ -172,7 +178,7 @@ class Plugin {
 	 */
 	public function init() {
 		
-		$this->set_filesystem( new \rps\components\wpUtilities\v1_0_0\FileSystem( $this ) );
+		$this->set_filesystem( new FileSystem( $this ) );
 		$this->load_dependencies();
 		$this->set_locale();		
 		$this->init_options();
@@ -191,7 +197,7 @@ class Plugin {
 	 * @since 1.0.0
 	 */
 	private function init_options() {
-		\rpsPluginBoilerplate\admin\options\Options::init( $this );
+		Options::init( $this );
 	}
 
 	/**
@@ -244,7 +250,7 @@ class Plugin {
 	 */
 	private function define_common_hooks() {
 
-		$common = new \rpsPluginBoilerplate\common\Common( $this );
+		$common = new Common( $this );
 		
 		$this->loader->add_action( 'init', $common, 'register_taxonomies' );
 		$this->loader->add_action( 'init', $common, 'register_posts' );
@@ -263,7 +269,7 @@ class Plugin {
 
 		if ( is_admin() ) {
 		
-			$admin = new \rpsPluginBoilerplate\admin\Admin( $this );
+			$admin = new Admin( $this );
 			
 			$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_styles' );
 			$this->loader->add_action( 'admin_enqueue_scripts', $admin, 'enqueue_scripts' );
@@ -283,7 +289,7 @@ class Plugin {
 
 		if ( ! is_admin() ) {
 		
-			$frontend = new \rpsPluginBoilerplate\frontend\Frontend( $this );
+			$frontend = new Frontend( $this );
 	
 			$this->loader->add_action( 'wp_enqueue_scripts', $frontend, 'enqueue_styles' );
 			$this->loader->add_action( 'wp_enqueue_scripts', $frontend, 'enqueue_scripts' );
@@ -474,7 +480,7 @@ class Plugin {
 	 */
 	public function set_filesystem( $filesystem ) {
 		
-		if ( $filesystem instanceof \rps\components\wpUtilities\v1_0_0\FileSystem ) {
+		if ( $filesystem instanceof FileSystem ) {
 			$this->filesystem = $filesystem;
 		}
 		
