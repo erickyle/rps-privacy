@@ -1,9 +1,6 @@
 <?php
 
 namespace rpsPluginBoilerplate;
-use \rpsPluginBoilerplate\includes\Plugin;
-use \rpsPluginBoilerplate\includes\Activator;
-use \rpsPluginBoilerplate\includes\Deactivator;
 
 /**
  * The plugin bootstrap file
@@ -102,7 +99,7 @@ spl_autoload_register( function ( $class ) {
  * @since 				1.0.0
  */
 function activate() {
-	Activator::activate();
+	\rpsPluginBoilerplate\includes\Activator::activate();
 }
 
 /**
@@ -112,7 +109,7 @@ function activate() {
  * @since 				1.0.0
  */
 function deactivate() {
-	Deactivator::deactivate();
+	\rpsPluginBoilerplate\includes\Deactivator::deactivate();
 }
 
 register_activation_hook( __FILE__, __NAMESPACE__ . '\activate' );
@@ -124,7 +121,7 @@ register_deactivation_hook( __FILE__, __NAMESPACE__ . '\deactivate' );
  * @since 				1.0.0
  */
 function run() {
-	$plugin = new Plugin( '1.0.0' );
+	$plugin = new \rpsPluginBoilerplate\includes\Plugin( '1.0.0' );
 	
 /** Uncomment to use components
 

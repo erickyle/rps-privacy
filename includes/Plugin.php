@@ -51,15 +51,6 @@ class Plugin {
 	protected $loader;
 
 	/**
-	 * The path to the plugin relative to the site root and suitable for use with WP_Filesystem.
-	 *
-	 * @since 				1.0.0
-	 * @access 				protected
-	 * @var 				string 				$plugin_path 					The path to the plugin relative to site root.
-	 */
-	protected $plugin_path;
-
-	/**
 	 * The name of the plugin used to uniquely identify it within the context of WordPress
 	 * and to define internationalization functionality.
 	 *
