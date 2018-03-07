@@ -238,7 +238,7 @@ class Plugin {
 
 		$i18n = new Internationalization();
 		$i18n->set_domain( $this->get_plugin_name() );
-		$this->loader->add_action( 'plugins_loaded', $i18n, 'load_plugin_textdomain' );
+		$i18n->load_plugin_textdomain();
 
 	}
 
