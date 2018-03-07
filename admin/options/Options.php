@@ -22,8 +22,7 @@ class Options {
 	/**
 	 * Prevent subclasses from generating a constructor.
 	 */
-	final function __construct() {
-	}
+	final function __construct() {}
 	
 	/**
 	* Initialize the options framework based on a plugin's properties

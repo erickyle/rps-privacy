@@ -40,41 +40,6 @@ class Admin {
 	}
 
 	/**
-	 * Adds top-level admin menu and the plugin submenu.
-	 *
-	 * @since 				1.0.0
-	 */
-	public function rps_admin_menu() {
-				
-		global $menu;
-		
-		$rps_admin_menu_handle = 'rps-admin-menu';
-		$rps_admin_menu_is_set = false;
-		
-		foreach ( $menu as $key => $menu_item ) {
-			if ( in_array( $rps_admin_menu_handle, $menu_item ) ) {
-				$rps_admin_menu_is_set = true;
-				break;
-			}
-		}
-		
-		//adds the top-level menu if not already set
-		if ( ! $rps_admin_menu_is_set ) {
-			add_menu_page( '', 'RPS', 'manage_options', $rps_admin_menu_handle );
-		}
-		
-		//adds the plugin settings sub-menu item and removes the RPS prefix
-		add_submenu_page( $rps_admin_menu_handle, $this->plugin->get_plugin_display_name(), str_replace( 'RPS ', '', $this->plugin->get_plugin_display_name() ), 'manage_options', Redux::getArg( Options::get_opt_name(), 'page_slug' ) );
-		
-		//removes the sub-menu item that is a duplicate of the top-level menu item
-		remove_submenu_page( $rps_admin_menu_handle, $rps_admin_menu_handle );
-				
-		//removes the menu item set by the Redux Framework
-		remove_menu_page( Redux::getArg( Options::get_opt_name(), 'page_slug' ) );
-		
-	}
-
-	/**
 	 * Register the stylesheets for the admin area.
 	 *
 	 * @since 				1.0.0

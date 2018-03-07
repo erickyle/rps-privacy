@@ -182,11 +182,12 @@ class Plugin {
 		$this->load_dependencies();
 		$this->set_locale();		
 		$this->init_options();
-
+		
+		$this->define_common_hooks();
 		$this->define_public_hooks();
 		$this->define_admin_hooks();
 		$this->define_shortcode_hooks();
-				
+		
 		$this->init_components();
 		
 	}

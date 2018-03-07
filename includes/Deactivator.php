@@ -24,7 +24,7 @@ class Deactivator {
 	}
 	
 	/**
-	 * Adds the plugin role.
+	 * Deletes the plugin role.
 	 *
 	 * @since 				1.0.0
 	 */
