@@ -50,10 +50,10 @@ use \rps\components\reduxFramework\v1_0_0\ReduxFramework;
 */
 
 /** Uncomment to use easyDigitalDownloads
-if ( !class_exists( '\rps\components\easyDigitalDownloads\v1_1_4\EasyDigitalDownloads' ) ) {
+if ( !class_exists( '\rps\components\easyDigitalDownloads\v1_1_5\EasyDigitalDownloads' ) ) {
 	require_once( dirname( __FILE__ ) . '/rps/components/easyDigitalDownloads/autoload.php' );
 }
-use \rps\components\easyDigitalDownloads\v1_1_4\EasyDigitalDownloads;
+use \rps\components\easyDigitalDownloads\v1_1_5\EasyDigitalDownloads;
 */
 
 /** Uncomment to use tgmPluginActivation
@@ -68,6 +68,12 @@ if ( ! class_exists( '\rps\components\wpUtilities\v1_0_0\WpUtilities' ) ) {
 	require_once dirname( __FILE__ ) . '/rps/components/wpUtilities/autoload.php';
 }
 use \rps\components\easyDigitalDownloads\v1_0_0\WpUtilities;
+*/
+
+/** Uncomment to use fontManager
+if ( !class_exists( '\rps\components\fontManager\v1_0_0\wordpress\FontManager' ) ) {
+	require_once dirname( __FILE__ ) . '/rps/components/fontManager/autoload.php';
+}
 */
 
 /**

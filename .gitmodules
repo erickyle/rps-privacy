@@ -10,3 +10,6 @@
 [submodule "rps/components/wpUtilities"]
 	path = rps/components/wpUtilities
 	url = git@github.com:redpixelstudios/rps-component-wp-utilities.git
+[submodule "rps/components/fontManager"]
+	path = rps/components/fontManager
+	url = git@github.com:redpixelstudios/rps-component-fonts.git
