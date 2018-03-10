@@ -46,7 +46,6 @@ if ( ! class_exists( 'ReduxFramework' ) and file_exists( dirname( __FILE__ ) . '
 if ( ! class_exists( '\rps\components\reduxFramework\v1_0_0\ReduxFramework' ) ) {
 	require_once dirname( __FILE__ ) . '/rps/components/reduxFramework/autoload.php';
 }
-use \rps\components\reduxFramework\v1_0_0\ReduxFramework;
 */
 
 /** Uncomment to use easyDigitalDownloads
@@ -67,7 +66,6 @@ use \rps\components\tgmPluginActivation\v1_0_0\TGMPluginActivator;
 if ( ! class_exists( '\rps\components\wpUtilities\v1_0_0\WpUtilities' ) ) {
 	require_once dirname( __FILE__ ) . '/rps/components/wpUtilities/autoload.php';
 }
-use \rps\components\easyDigitalDownloads\v1_0_0\WpUtilities;
 */
 
 /** Uncomment to use fontManager
