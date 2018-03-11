@@ -17,7 +17,7 @@ use \ReduxFrameworkPlugin;
  */
 class Options {
 	
-	const OPT_NAME = 'rps_plugin_boilerplate_options';
+	const OPT_NAME = 'rps_plugin_boilerplate';
 	
 	/**
 	 * Prevent subclasses from generating a constructor.
