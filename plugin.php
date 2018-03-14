@@ -128,6 +128,7 @@ register_deactivation_hook( __FILE__, __NAMESPACE__ . '\deactivate' );
  * @since 				1.0.0
  */
 add_action( 'plugins_loaded', function() {
+	
 	$plugin = new Plugin( '1.0.0' );
 	
 /** Uncomment to use components
