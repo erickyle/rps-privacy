@@ -4,6 +4,8 @@ namespace rpsPluginBoilerplate\admin\options;
 use \Redux;
 use \ReduxFrameworkPlugin;
 
+use \rps\components\reduxFramework\v1_0_2\ReduxFramework
+
 /**
  * Loader for the Redux Framework options.
  *
@@ -34,7 +36,7 @@ class Options {
 	static function init( $plugin ) {
 		
 		self::set_sections();
-		\rps\components\reduxFramework\v1_0_0\ReduxFramework::init( $plugin, self::OPT_NAME );
+		ReduxFramework::init( $plugin, self::OPT_NAME );
 		
 	}
 

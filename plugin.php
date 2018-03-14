@@ -43,7 +43,7 @@ if ( ! defined( 'WPINC' ) ) {
 if ( ! class_exists( 'ReduxFramework' ) and file_exists( dirname( __FILE__ ) . '/admin/ReduxFramework/redux-framework.php' ) ) {
 	require_once( dirname( __FILE__ ) . '/admin/ReduxFramework/redux-framework.php' );
 }
-if ( ! class_exists( '\rps\components\reduxFramework\v1_0_0\ReduxFramework' ) ) {
+if ( ! class_exists( '\rps\components\reduxFramework\v1_0_2\ReduxFramework' ) ) {
 	require_once dirname( __FILE__ ) . '/rps/components/reduxFramework/autoload.php';
 }
 */
